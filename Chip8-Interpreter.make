@@ -42,8 +42,8 @@ endef
 
 ifeq ($(config),debug_x64)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x64/Debug/raylib-quickstart
+TARGET = $(TARGETDIR)/Chip8-Interpreter
+OBJDIR = obj/x64/Debug/Chip8-Interpreter
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17 -Wno-deprecated-declarations
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
@@ -53,8 +53,8 @@ ALL_LDFLAGS += $(LDFLAGS) -m64
 
 else ifeq ($(config),debug_x86)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x86/Debug/raylib-quickstart
+TARGET = $(TARGETDIR)/Chip8-Interpreter
+OBJDIR = obj/x86/Debug/Chip8-Interpreter
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17 -Wno-deprecated-declarations
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
@@ -64,8 +64,8 @@ ALL_LDFLAGS += $(LDFLAGS) -m32
 
 else ifeq ($(config),debug_arm64)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/ARM64/Debug/raylib-quickstart
+TARGET = $(TARGETDIR)/Chip8-Interpreter
+OBJDIR = obj/ARM64/Debug/Chip8-Interpreter
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17 -Wno-deprecated-declarations
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17 -Wno-deprecated-declarations
@@ -75,8 +75,8 @@ ALL_LDFLAGS += $(LDFLAGS)
 
 else ifeq ($(config),release_x64)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x64/Release/raylib-quickstart
+TARGET = $(TARGETDIR)/Chip8-Interpreter
+OBJDIR = obj/x64/Release/Chip8-Interpreter
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
@@ -86,8 +86,8 @@ ALL_LDFLAGS += $(LDFLAGS) -m64
 
 else ifeq ($(config),release_x86)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x86/Release/raylib-quickstart
+TARGET = $(TARGETDIR)/Chip8-Interpreter
+OBJDIR = obj/x86/Release/Chip8-Interpreter
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
@@ -97,8 +97,8 @@ ALL_LDFLAGS += $(LDFLAGS) -m32
 
 else ifeq ($(config),release_arm64)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/ARM64/Release/raylib-quickstart
+TARGET = $(TARGETDIR)/Chip8-Interpreter
+OBJDIR = obj/ARM64/Release/Chip8-Interpreter
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
@@ -119,7 +119,9 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/ui.o
 OBJECTS += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/ui.o
 
 # Rules
 # #############################################
@@ -129,7 +131,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking raylib-quickstart
+	@echo Linking Chip8-Interpreter
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -150,7 +152,7 @@ else
 endif
 
 clean:
-	@echo Cleaning raylib-quickstart
+	@echo Cleaning Chip8-Interpreter
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -184,6 +186,9 @@ endif
 # #############################################
 
 $(OBJDIR)/main.o: src/main.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ui.o: src/ui.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
