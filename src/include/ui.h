@@ -37,4 +37,18 @@ struct Pixel
 	Color color = { 255, 255, 255, 255 };
 };
 
+struct Font_C8
+{
+    uint64_t lines[5];
+    int width = 4;
+    int height = 5;
+};
+
+class Charset
+{
+    public:
+        Font_C8 Zero = {{0xf0, 0x90, 0x90, 0x90, 0xf0}};
+        Font_C8 One = {{0x20, 0x30, 0x20, 0x20, 0x70}};
+};
+
 #endif

@@ -21,6 +21,8 @@ int main ()
 	// Create the window and OpenGL context
 	InitWindow(1280, 800, "Chip-8");
 	Screen* screen = new Screen(GetScreenHeight(), GetScreenWidth());
+	Charset* cs = new Charset();
+	Charset Charset = *cs;
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
@@ -30,16 +32,22 @@ int main ()
 
 	uint64_t pixels[32] = {};
 
-	for (int i = 0; i < 32; i++)
+	// CHECKERBOARD
+	// for (int i = 0; i < 32; i++)
+	// {
+	// 	if (i % 2 == 0)
+	// 	{
+	// 		pixels[i] = 0xAAAAAAAAAAAAAAAA;
+	// 	}
+	// 	else
+	// 	{
+	// 		pixels[i] = 0x5555555555555555;
+	// 	}
+	// } 
+
+	for (int i = 0; i < Charset.One.height; i++)
 	{
-		if (i % 2 == 0)
-		{
-			pixels[i] = 0xAAAAAAAAAAAAAAAA;
-		}
-		else
-		{
-			pixels[i] = 0x5555555555555555;
-		}
+		pixels[i] = Charset.One.lines[i];
 	}
 
 //	pixels[0] = 12297829382473034410;
