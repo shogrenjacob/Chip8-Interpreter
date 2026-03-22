@@ -17,8 +17,6 @@ uint64_t Screen::GetScreen() { return *this->screen; }
 
 void Screen::RenderScreen()
 {
-    // Go through each int64 and l-and with each bit, if the result is 1 then render a pixel
-    // Pixel should be rendered at y = index of int64 and x = bit position in int
     int64_t mask = 1;
 
     for (int i = 0; i < 32; i++)
@@ -33,5 +31,23 @@ void Screen::RenderScreen()
 
             row >>= 1;
         }
+    }
+}
+
+void Screen::DrawSprite(Sprite sprite, uint64_t s[32], uint ew_offset, uint ns_offset)
+{
+    for (int i = 0; i < sprite.height; i++)
+	{
+		s[i + ns_offset] |= sprite.lines[i] << ew_offset;
+		cout << s[i + ns_offset];
+	}
+}
+
+void Screen::DebugScreen(uint64_t s[32])
+{
+    cout << endl;
+    for (int i = 0; i < 32; i++)
+    {
+        cout << "[" << i << "]  " << s[i] << endl;
     }
 }

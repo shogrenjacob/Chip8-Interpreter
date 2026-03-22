@@ -11,7 +11,6 @@ by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit h
 #include <iostream>
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
 #include "./include/ui.h"
-using namespace std;
 
 int main ()
 {
@@ -45,10 +44,12 @@ int main ()
 	// 	}
 	// } 
 
-	for (int i = 0; i < Charset.One.height; i++)
-	{
-		pixels[i] = Charset.One.lines[i];
-	}
+	screen->DrawSprite(Charset.One, pixels, 0, 1);
+	screen->DrawSprite(Charset.Two, pixels, 5, 5);
+	screen->DrawSprite(Charset.Three, pixels, 10, 10);
+	screen->DrawSprite(Charset.Four, pixels, 15, 15);
+	screen->DrawSprite(Charset.Five, pixels, 20, 20);	
+	screen->DebugScreen(pixels);
 
 //	pixels[0] = 12297829382473034410;
 
