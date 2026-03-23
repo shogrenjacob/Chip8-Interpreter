@@ -24,6 +24,7 @@ class Screen
         int width;
         int pixel_width;
         int pixel_height;
+        int cursor;
         
     public:
         Screen(int height, int width);
@@ -34,6 +35,7 @@ class Screen
         int GetHeight();
         int GetWidth();
         void DebugScreen(uint64_t s[32]);
+        void DrawScreen(Sprite s[64], uint64_t screen[32]);
 
 };
 

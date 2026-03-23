@@ -38,9 +38,27 @@ void Screen::DrawSprite(Sprite sprite, uint64_t s[32], uint ew_offset, uint ns_o
 {
     for (int i = 0; i < sprite.height; i++)
 	{
-		s[i + ns_offset] |= sprite.lines[i] << ew_offset;
+		s[i + ns_offset] |= sprite.lines[i] << ew_offset >> 4;
 		cout << s[i + ns_offset];
 	}
+}
+
+void Screen::DrawScreen(Sprite s[64], uint64_t screen[32])
+{
+    this->cursor = 0;
+    uint line = 0;
+
+    for (int i = 0; i < 64; i++)
+    {
+        if (this->cursor >= 30) // 56
+        {
+            this->cursor = 0;
+            line += s[i].height + 1;
+        }
+
+        DrawSprite(s[i], screen, cursor, line);
+        this->cursor += s[i].width + 1;
+    }
 }
 
 void Screen::DebugScreen(uint64_t s[32])
