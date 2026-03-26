@@ -39,7 +39,6 @@ void Screen::DrawSprite(Sprite sprite, uint64_t s[32], uint ew_offset, uint ns_o
     for (int i = 0; i < sprite.height; i++)
 	{
 		s[i + ns_offset] |= sprite.lines[i] << ew_offset >> 4;
-		cout << s[i + ns_offset];
 	}
 }
 
