@@ -6,8 +6,12 @@ Chip8 c8 = Chip8();
 
 void InitC8()
 {
-    TestROM[0x200] = 0x11;
-    TestROM[0x201] = 0x22;
+    TestROM[0x200] = 0x61;
+    TestROM[0x201] = 0x01;
+    TestROM[0x202] = 0x71;
+    TestROM[0x203] = 0x02;
+    TestROM[0x204] = 0xA1;
+    TestROM[0x205] = 0x00;
     c8.RAM->LoadRAM(TestROM);
 }
 
@@ -50,9 +54,23 @@ void TestReadIns(Chip8* c8)
     cout << "--- ReadIns = " << chip.ReadIns() << endl;
 }
 
+Chip8 TestFDEAndIns(Chip8* c8)
+{
+    Chip8 chip = *c8;
+    chip.Decode();
+    chip.Decode();
+    chip.Decode();
+
+    return chip;
+}
+
 int main()
 {
     InitC8();
-    TestReadIns(&c8);
-    TestReadByte(&c8);
+    // TestReadIns(&c8);
+    // TestReadByte(&c8);
+    c8 = TestFDEAndIns(&c8);
+
+    cout << "V1 Again: " << (int)c8.V1 << endl;
+    cout << "IR: " << (int)c8.I << endl;
 }

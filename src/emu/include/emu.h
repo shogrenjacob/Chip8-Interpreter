@@ -1,5 +1,7 @@
 #include <cstdint>
 #include <stack>
+#include <unordered_map>
+#include <functional>
 #include "memory.h"
 using namespace std;
 
@@ -51,11 +53,19 @@ class Chip8
         uint8_t ReadByte();
         uint16_t ReadIns();
 
-        void Fetch();
+        uint16_t Fetch();
         void Decode();
         void Execute();
         // TODO: Keypad
         
+        // Instructions
+        void ClearScreen(uint16_t ins);
+        void Jump(uint16_t ins);
+        void SetReg(uint16_t ins);
+        void AddToReg(uint16_t ins);
+        void SetIR(uint16_t ins);
+        void Draw(uint16_t ins);
+
 };
 
 #endif // EMU_H
