@@ -21,6 +21,8 @@ class Memory
         // Set byte at given address in RAM to given value
         void SetByte(uint address, uint8_t val);
 
+        void LoadRAM(uint8_t ROM[]);
+
         // Clears contents of program memory (Charset still remains)
         void Clear();
 

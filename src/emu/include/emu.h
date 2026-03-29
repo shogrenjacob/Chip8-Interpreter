@@ -15,8 +15,9 @@ class Chip8
 
     public:
         uint16_t I = 0; // Index Register, point to location in memory
-        stack<uint16_t> ST; // Stack for 16-bit addresses
-        Memory RAM;
+        stack<uint16_t>* ST; // Stack for 16-bit addresses
+        Memory* RAM;
+        uint16_t bus = 0;
 
         // General-Purpose Variable Registers
         uint8_t V0 = 0;
@@ -36,7 +37,7 @@ class Chip8
         uint8_t VE = 0;
         uint8_t VF = 0; // Also used as a flag register
 
-        Chip8(Memory RAM, int PC);
+        Chip8();
 
         void IncPC();
         void DecPC();
@@ -47,6 +48,12 @@ class Chip8
         void RunDelay();
         void RunSound();
 
+        uint8_t ReadByte();
+        uint16_t ReadIns();
+
+        void Fetch();
+        void Decode();
+        void Execute();
         // TODO: Keypad
         
 };

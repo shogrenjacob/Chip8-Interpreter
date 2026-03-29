@@ -28,10 +28,12 @@ ifeq ($(origin AR), default)
   AR = ar
 endif
 RESCOMP = windres
-INCLUDES += -Ibuild/src -Ibuild/include -Ibuild/external/raylib-master/src
+INCLUDES += -I../src -I../include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+LIBS +=
+LDDEPS +=
 LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
 define PREBUILDCMDS
 endef
@@ -41,69 +43,57 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug_x64)
-TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/Chip8-Interpreter
-OBJDIR = obj/x64/Debug/Chip8-Interpreter
+TARGETDIR = ../bin/Debug
+TARGET = $(TARGETDIR)/tests
+OBJDIR = obj/x64/Debug/tests
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17 -Wno-deprecated-declarations
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
-LIBS += bin/Debug/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
-LDDEPS += bin/Debug/libraylib.a
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -Wno-deprecated-declarations
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++17 -Wno-deprecated-declarations
 ALL_LDFLAGS += $(LDFLAGS) -m64
 
 else ifeq ($(config),debug_x86)
-TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/Chip8-Interpreter
-OBJDIR = obj/x86/Debug/Chip8-Interpreter
+TARGETDIR = ../bin/Debug
+TARGET = $(TARGETDIR)/tests
+OBJDIR = obj/x86/Debug/tests
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17 -Wno-deprecated-declarations
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17 -Wno-deprecated-declarations
-LIBS += bin/Debug/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
-LDDEPS += bin/Debug/libraylib.a
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -g -Wno-deprecated-declarations
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -g -std=c++17 -Wno-deprecated-declarations
 ALL_LDFLAGS += $(LDFLAGS) -m32
 
 else ifeq ($(config),debug_arm64)
-TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/Chip8-Interpreter
-OBJDIR = obj/ARM64/Debug/Chip8-Interpreter
+TARGETDIR = ../bin/Debug
+TARGET = $(TARGETDIR)/tests
+OBJDIR = obj/ARM64/Debug/tests
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17 -Wno-deprecated-declarations
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17 -Wno-deprecated-declarations
-LIBS += bin/Debug/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
-LDDEPS += bin/Debug/libraylib.a
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -Wno-deprecated-declarations
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -g -std=c++17 -Wno-deprecated-declarations
 ALL_LDFLAGS += $(LDFLAGS)
 
 else ifeq ($(config),release_x64)
-TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/Chip8-Interpreter
-OBJDIR = obj/x64/Release/Chip8-Interpreter
+TARGETDIR = ../bin/Release
+TARGET = $(TARGETDIR)/tests
+OBJDIR = obj/x64/Release/tests
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
-LIBS += bin/Release/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
-LDDEPS += bin/Release/libraylib.a
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -Wno-deprecated-declarations
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17 -Wno-deprecated-declarations
 ALL_LDFLAGS += $(LDFLAGS) -m64
 
 else ifeq ($(config),release_x86)
-TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/Chip8-Interpreter
-OBJDIR = obj/x86/Release/Chip8-Interpreter
+TARGETDIR = ../bin/Release
+TARGET = $(TARGETDIR)/tests
+OBJDIR = obj/x86/Release/tests
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
-LIBS += bin/Release/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
-LDDEPS += bin/Release/libraylib.a
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -O2 -Wno-deprecated-declarations
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -O2 -std=c++17 -Wno-deprecated-declarations
 ALL_LDFLAGS += $(LDFLAGS) -m32
 
 else ifeq ($(config),release_arm64)
-TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/Chip8-Interpreter
-OBJDIR = obj/ARM64/Release/Chip8-Interpreter
+TARGETDIR = ../bin/Release
+TARGET = $(TARGETDIR)/tests
+OBJDIR = obj/ARM64/Release/tests
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17 -Wno-deprecated-declarations
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17 -Wno-deprecated-declarations
-LIBS += bin/Release/libraylib.a -framework OpenGL -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreAudio -framework CoreVideo -framework AudioToolbox
-LDDEPS += bin/Release/libraylib.a
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -Wno-deprecated-declarations
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -O2 -std=c++17 -Wno-deprecated-declarations
 ALL_LDFLAGS += $(LDFLAGS)
 
 endif
@@ -119,8 +109,10 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/emu.o
+GENERATED += $(OBJDIR)/emu_tests.o
 GENERATED += $(OBJDIR)/memory.o
 OBJECTS += $(OBJDIR)/emu.o
+OBJECTS += $(OBJDIR)/emu_tests.o
 OBJECTS += $(OBJDIR)/memory.o
 
 # Rules
@@ -131,7 +123,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking Chip8-Interpreter
+	@echo Linking tests
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -152,7 +144,7 @@ else
 endif
 
 clean:
-	@echo Cleaning Chip8-Interpreter
+	@echo Cleaning tests
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -185,10 +177,13 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/emu.o: build/src/emu/emu.cpp
+$(OBJDIR)/emu.o: ../src/emu/emu.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/memory.o: build/src/emu/memory.cpp
+$(OBJDIR)/memory.o: ../src/emu/memory.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/emu_tests.o: ../src/emu/tests/emu_tests.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

@@ -170,7 +170,7 @@ if (downloadRaylib) then
 
     project (workspaceName)
         kind "ConsoleApp"
-        location "../"
+        location "."
         targetdir "../bin/%{cfg.buildcfg}"
 
         filter {"system:windows", "configurations:Release", "action:gmake*"}
@@ -191,12 +191,14 @@ if (downloadRaylib) then
         vpaths 
         {
             ["Header Files/*"] = { "../include/**.h",  "../include/**.hpp", "../src/**.h", "../src/**.hpp"},
-            ["Source Files/*"] = {"../src/**.c", "src/**.cpp"},
+            ["Source Files/*"] = {"../src/**.c", "../src/**.cpp"},
             ["Windows Resource Files/*"] = {"../src/**.rc", "../src/**.ico"},
             ["Game Resource Files/*"] = {"../resources/**"},
         }
         
-        files {"../src/**.c", "../src/**.cpp", "../src/**.h", "../src/**.hpp", "../include/**.h", "../include/**.hpp"}
+        files {"../src/main.cpp", "../src/ui.cpp", "../src/emu/emu.cpp", "../src/emu/memory.cpp", "../src/**.h", "../src/**.hpp", "../include/**.h", "../include/**.hpp"}
+        
+        excludes {"../src/emu/tests/**"}
         
         filter {"system:windows", "action:vs*"}
             files {"../src/*.rc", "../src/*.ico"}
@@ -304,3 +306,16 @@ if (downloadRaylib) then
             compileas "Objective-C"
 
         filter{}
+
+    project "tests"
+        kind "ConsoleApp"
+        location "."
+        targetdir "../bin/%{cfg.buildcfg}"
+
+        files {"../src/emu/tests/emu_tests.cpp", "../src/emu/emu.cpp", "../src/emu/memory.cpp", "../src/**.h", "../src/**.hpp", "../include/**.h", "../include/**.hpp"}
+
+        includedirs { "../src", "../include" }
+
+        cppdialect "C++17"
+
+        platform_defines()
