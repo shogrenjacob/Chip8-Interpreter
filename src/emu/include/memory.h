@@ -12,8 +12,8 @@ class Memory
         uint8_t Ram[4096];
     
     public:
-        // Converts Chip-8 program to array of bytes and loads into RAM
-        void LoadProgram(fstream &file);
+        // Converts Chip-8 program to array of bytes and loads into RAM returns 0 for success and -1 for fail
+        int LoadProgram(string& f);
 
         // Return byte of data held at given address
         uint8_t GetByte(uint address);

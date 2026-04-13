@@ -99,7 +99,7 @@ void Chip8::Decode()
 
 void Chip8::Execute()
 {
-
+    // TODO:
 }
 
 void Chip8::ClearScreen(uint16_t ins)
