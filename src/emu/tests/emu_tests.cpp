@@ -71,6 +71,6 @@ int main()
     // TestReadByte(&c8);
     c8 = TestFDEAndIns(&c8);
 
-    cout << "V1 Again: " << (int)c8.V1 << endl;
+    cout << "V1 Again: " << (int)c8.V[0x1] << endl;
     cout << "IR: " << (int)c8.I << endl;
 }

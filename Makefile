@@ -65,6 +65,7 @@ ifneq (,$(tests_config))
 	@echo "==== Building tests ($(tests_config)) ===="
 	@${MAKE} --no-print-directory -C build -f tests.make config=$(tests_config)
 endif
+	./bin/Debug/tests
 
 run: raylib
 ifneq (,$(Chip8_Interpreter_config))

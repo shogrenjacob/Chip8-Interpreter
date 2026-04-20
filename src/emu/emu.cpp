@@ -117,118 +117,121 @@ void Chip8::Jump(uint16_t ins)
 
 void Chip8::SetReg(uint16_t ins)
 {
-    uint16_t WhichReg = ins & 0x0F00;
+    uint16_t WhichReg = ins & 0x0F00 >> 8;
     uint8_t data = ins & 0x00FF;
 
-    switch (WhichReg)
-    {
-        case 0x0000:
-            this->V0 = data;
-            break;
-        case 0x0100:
-            this->V1 = data;
-            break;
-        case 0x0200:
-            this->V2 = data;
-            break;
-        case 0x0300:
-            this->V3 = data;
-            break;
-        case 0x0400:
-            this->V4 = data;
-            break;
-        case 0x0500:
-            this->V5 = data;
-            break;
-        case 0x0600:
-            this->V6 = data;
-            break;
-        case 0x0700:
-            this->V7 = data;
-            break;
-        case 0x0800:
-            this->V8 = data;
-            break;
-        case 0x0900:
-            this->V9 = data;
-            break;
-        case 0x0A00:
-            this->VA = data;
-            break;
-        case 0x0B00:
-            this->VB = data;
-            break;
-        case 0x0C00:
-            this->VC = data;
-            break;
-        case 0x0D00:
-            this->VD = data;
-            break;
-        case 0x0E00:
-            this->VE = data;
-            break;
-        case 0x0F00:
-            this->VF = data;
-            break;
-    }
+    this->V[WhichReg] = data;
+    // switch (WhichReg)
+    // {
+    //     case 0x0000:
+    //         this->V0 = data;
+    //         break;
+    //     case 0x0100:
+    //         this->V1 = data;
+    //         break;
+    //     case 0x0200:
+    //         this->V2 = data;
+    //         break;
+    //     case 0x0300:
+    //         this->V3 = data;
+    //         break;
+    //     case 0x0400:
+    //         this->V4 = data;
+    //         break;
+    //     case 0x0500:
+    //         this->V5 = data;
+    //         break;
+    //     case 0x0600:
+    //         this->V6 = data;
+    //         break;
+    //     case 0x0700:
+    //         this->V7 = data;
+    //         break;
+    //     case 0x0800:
+    //         this->V8 = data;
+    //         break;
+    //     case 0x0900:
+    //         this->V9 = data;
+    //         break;
+    //     case 0x0A00:
+    //         this->VA = data;
+    //         break;
+    //     case 0x0B00:
+    //         this->VB = data;
+    //         break;
+    //     case 0x0C00:
+    //         this->VC = data;
+    //         break;
+    //     case 0x0D00:
+    //         this->VD = data;
+    //         break;
+    //     case 0x0E00:
+    //         this->VE = data;
+    //         break;
+    //     case 0x0F00:
+    //         this->VF = data;
+    //         break;
+    // }
 }
 
 void Chip8::AddToReg(uint16_t ins)
 {
-    uint16_t WhichReg = ins & 0x0F00;
+    uint16_t WhichReg = ins & 0x0F00 >> 8;
     uint8_t data = ins & 0x00FF;
 
-    switch (WhichReg)
-    {
-        case 0x0000:
-            this->V0 += data;
-            break;
-        case 0x0100:
-            this->V1 += data;
-            break;
-        case 0x0200:
-            this->V2 += data;
-            break;
-        case 0x0300:
-            this->V3 += data;
-            break;
-        case 0x0400:
-            this->V4 += data;
-            break;
-        case 0x0500:
-            this->V5 += data;
-            break;
-        case 0x0600:
-            this->V6 += data;
-            break;
-        case 0x0700:
-            this->V7 += data;
-            break;
-        case 0x0800:
-            this->V8 += data;
-            break;
-        case 0x0900:
-            this->V9 += data;
-            break;
-        case 0x0A00:
-            this->VA += data;
-            break;
-        case 0x0B00:
-            this->VB += data;
-            break;
-        case 0x0C00:
-            this->VC += data;
-            break;
-        case 0x0D00:
-            this->VD += data;
-            break;
-        case 0x0E00:
-            this->VE += data;
-            break;
-        case 0x0F00:
-            this->VF += data;
-            break;
-    }
+    this->V[WhichReg] += data;
+
+    // switch (WhichReg)
+    // {
+    //     case 0x0000:
+    //         this->V0 += data;
+    //         break;
+    //     case 0x0100:
+    //         this->V1 += data;
+    //         break;
+    //     case 0x0200:
+    //         this->V2 += data;
+    //         break;
+    //     case 0x0300:
+    //         this->V3 += data;
+    //         break;
+    //     case 0x0400:
+    //         this->V4 += data;
+    //         break;
+    //     case 0x0500:
+    //         this->V5 += data;
+    //         break;
+    //     case 0x0600:
+    //         this->V6 += data;
+    //         break;
+    //     case 0x0700:
+    //         this->V7 += data;
+    //         break;
+    //     case 0x0800:
+    //         this->V8 += data;
+    //         break;
+    //     case 0x0900:
+    //         this->V9 += data;
+    //         break;
+    //     case 0x0A00:
+    //         this->VA += data;
+    //         break;
+    //     case 0x0B00:
+    //         this->VB += data;
+    //         break;
+    //     case 0x0C00:
+    //         this->VC += data;
+    //         break;
+    //     case 0x0D00:
+    //         this->VD += data;
+    //         break;
+    //     case 0x0E00:
+    //         this->VE += data;
+    //         break;
+    //     case 0x0F00:
+    //         this->VF += data;
+    //         break;
+    // }
 }
 
 void Chip8::SetIR(uint16_t ins)

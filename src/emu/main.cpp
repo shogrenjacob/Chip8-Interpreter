@@ -27,7 +27,7 @@ int main()
         chip8.Decode();
     }
 
-    cout << "V1 Again: " << (int)chip8.V1 << endl;
+    cout << "V1 Again: " << (int)chip8.V[0x1] << endl;
     cout << "IR: " << (int)chip8.I << endl;
 
     return 0;

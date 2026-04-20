@@ -22,22 +22,24 @@ class Chip8
         uint16_t bus = 0;
 
         // General-Purpose Variable Registers
-        uint8_t V0 = 0;
-        uint8_t V1 = 0;
-        uint8_t V2 = 0;
-        uint8_t V3 = 0;
-        uint8_t V4 = 0;
-        uint8_t V5 = 0;
-        uint8_t V6 = 0;
-        uint8_t V7 = 0;
-        uint8_t V8 = 0;
-        uint8_t V9 = 0;
-        uint8_t VA = 0;
-        uint8_t VB = 0;
-        uint8_t VC = 0;
-        uint8_t VD = 0;
-        uint8_t VE = 0;
-        uint8_t VF = 0; // Also used as a flag register
+        // uint8_t V0 = 0;
+        // uint8_t V1 = 0;
+        // uint8_t V2 = 0;
+        // uint8_t V3 = 0;
+        // uint8_t V4 = 0;
+        // uint8_t V5 = 0;
+        // uint8_t V6 = 0;
+        // uint8_t V7 = 0;
+        // uint8_t V8 = 0;
+        // uint8_t V9 = 0;
+        // uint8_t VA = 0;
+        // uint8_t VB = 0;
+        // uint8_t VC = 0;
+        // uint8_t VD = 0;
+        // uint8_t VE = 0;
+        // uint8_t VF = 0; // Also used as a flag register
+
+        uint8_t V[0xF];
 
         Chip8();
 
