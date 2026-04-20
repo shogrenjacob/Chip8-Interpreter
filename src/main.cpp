@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include <iostream>
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
-#include "./include/ui.h"
+#include "./emu/include/emu.h"
 
 int main ()
 {
@@ -10,7 +10,7 @@ int main ()
 
 	// Create the window and OpenGL context
 	InitWindow(1280, 800, "Chip-8");
-	Screen* screen = new Screen();
+	Chip8* emu = new Chip8();
 	Charset* cs = new Charset();
 	Charset Charset = *cs;
 
@@ -71,22 +71,32 @@ int main ()
 	// screen->DrawSprite(Charset.D, screen2, 15, 15);
 	// screen->DrawSprite(Charset.E, screen2, 20, 20);
 
-	screen->DrawScreen(sprites, screen1);
-	screen->DebugScreen(screen1);
+	//emu->screen->DrawScreen(sprites, screen1);
+	emu->screen->DebugScreen(screen1);
 
 //	screen1[0] = 12297829382473034410;
+
+	string filename;
+    cout << "Enter path to ROM: " << endl;
+    cin >> filename;
+
+    emu->RAM->LoadProgram(filename);
 
 	// game loop
 	while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
+		if (emu->PC < 4096 )
+		{
+			emu->Decode();
+		}
 		// drawing
 		BeginDrawing();
 
 		// Setup the back buffer for drawing (clear color and depth buffers)
 		ClearBackground(BLACK);
 
-		screen->LoadScreen(screen1);
-		screen->RenderScreen();
+		//emu->screen->LoadScreen(screen1);
+		emu->screen->RenderScreen();
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();

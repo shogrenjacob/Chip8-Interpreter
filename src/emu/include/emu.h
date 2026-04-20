@@ -12,7 +12,6 @@ using namespace std;
 class Chip8
 {
     private:
-        int PC; // Program counter
         uint8_t delay = 0;
         uint8_t sound = 0;
 
@@ -22,6 +21,7 @@ class Chip8
         Memory* RAM;
         uint16_t bus = 0;
         Screen* screen;
+        int PC; // Program counter
 
         // General-Purpose Variable Registers
         // uint8_t V0 = 0;
