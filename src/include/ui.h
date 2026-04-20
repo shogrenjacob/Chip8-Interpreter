@@ -27,9 +27,9 @@ class Screen
         int cursor;
         
     public:
-        Screen(int height, int width);
+        Screen();
         void LoadScreen(uint64_t s[32]);
-        uint64_t GetScreen();
+        uint64_t* GetScreen();
         void RenderScreen();
         void DrawSprite(Sprite sprite, uint64_t s[32], uint ew_offset, uint ns_offset); //TODO: Might need to use a pointer to s
         int GetHeight();

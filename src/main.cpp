@@ -10,7 +10,7 @@ int main ()
 
 	// Create the window and OpenGL context
 	InitWindow(1280, 800, "Chip-8");
-	Screen* screen = new Screen(GetScreenHeight(), GetScreenWidth());
+	Screen* screen = new Screen();
 	Charset* cs = new Charset();
 	Charset Charset = *cs;
 

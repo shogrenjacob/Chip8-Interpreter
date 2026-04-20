@@ -5,6 +5,7 @@ Chip8::Chip8()
     this->PC = 0x200;
     this->RAM = new Memory();
     this->ST = new stack<uint16_t>();
+    this->screen = new Screen();
 }
 
 void Chip8::IncPC() { this->PC++; }
@@ -89,7 +90,7 @@ void Chip8::Decode()
         case 0xC000:
             break;
         case 0xD000:
-            break;
+            this->Draw(ins);
         case 0xE000:
             break;
         case 0xF000:
@@ -121,57 +122,6 @@ void Chip8::SetReg(uint16_t ins)
     uint8_t data = ins & 0x00FF;
 
     this->V[WhichReg] = data;
-    // switch (WhichReg)
-    // {
-    //     case 0x0000:
-    //         this->V0 = data;
-    //         break;
-    //     case 0x0100:
-    //         this->V1 = data;
-    //         break;
-    //     case 0x0200:
-    //         this->V2 = data;
-    //         break;
-    //     case 0x0300:
-    //         this->V3 = data;
-    //         break;
-    //     case 0x0400:
-    //         this->V4 = data;
-    //         break;
-    //     case 0x0500:
-    //         this->V5 = data;
-    //         break;
-    //     case 0x0600:
-    //         this->V6 = data;
-    //         break;
-    //     case 0x0700:
-    //         this->V7 = data;
-    //         break;
-    //     case 0x0800:
-    //         this->V8 = data;
-    //         break;
-    //     case 0x0900:
-    //         this->V9 = data;
-    //         break;
-    //     case 0x0A00:
-    //         this->VA = data;
-    //         break;
-    //     case 0x0B00:
-    //         this->VB = data;
-    //         break;
-    //     case 0x0C00:
-    //         this->VC = data;
-    //         break;
-    //     case 0x0D00:
-    //         this->VD = data;
-    //         break;
-    //     case 0x0E00:
-    //         this->VE = data;
-    //         break;
-    //     case 0x0F00:
-    //         this->VF = data;
-    //         break;
-    // }
 }
 
 void Chip8::AddToReg(uint16_t ins)
@@ -180,58 +130,6 @@ void Chip8::AddToReg(uint16_t ins)
     uint8_t data = ins & 0x00FF;
 
     this->V[WhichReg] += data;
-
-    // switch (WhichReg)
-    // {
-    //     case 0x0000:
-    //         this->V0 += data;
-    //         break;
-    //     case 0x0100:
-    //         this->V1 += data;
-    //         break;
-    //     case 0x0200:
-    //         this->V2 += data;
-    //         break;
-    //     case 0x0300:
-    //         this->V3 += data;
-    //         break;
-    //     case 0x0400:
-    //         this->V4 += data;
-    //         break;
-    //     case 0x0500:
-    //         this->V5 += data;
-    //         break;
-    //     case 0x0600:
-    //         this->V6 += data;
-    //         break;
-    //     case 0x0700:
-    //         this->V7 += data;
-    //         break;
-    //     case 0x0800:
-    //         this->V8 += data;
-    //         break;
-    //     case 0x0900:
-    //         this->V9 += data;
-    //         break;
-    //     case 0x0A00:
-    //         this->VA += data;
-    //         break;
-    //     case 0x0B00:
-    //         this->VB += data;
-    //         break;
-    //     case 0x0C00:
-    //         this->VC += data;
-    //         break;
-    //     case 0x0D00:
-    //         this->VD += data;
-    //         break;
-    //     case 0x0E00:
-    //         this->VE += data;
-    //         break;
-    //     case 0x0F00:
-    //         this->VF += data;
-    //         break;
-    // }
 }
 
 void Chip8::SetIR(uint16_t ins)
@@ -239,4 +137,25 @@ void Chip8::SetIR(uint16_t ins)
     uint16_t address = ins & 0x0FFF;
     this->I = address;
     cout << "I after SetIR: " << this->I << endl;
+}
+
+void Chip8::Draw(uint16_t ins)
+{
+    uint8_t xReg = ins & 0x0F00;
+    uint8_t yReg = ins & 0x00F0;
+    uint8_t N = ins & 0x000F;
+
+    uint8_t X = this->V[xReg] % 64;
+    uint8_t Y = this->V[yReg] % 32;
+
+    Sprite* ns = new Sprite();
+    
+    ns->height = N;
+
+    for (int i = 0; i < N; i++)
+    {
+        ns->lines.push_back(this->RAM->GetByte(this->I+i));
+    }
+
+    this->screen->DrawSprite(*ns, this->screen->GetScreen(), X, Y);
 }

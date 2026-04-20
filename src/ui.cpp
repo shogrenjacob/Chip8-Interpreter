@@ -1,6 +1,6 @@
 #include "include/ui.h"
 
-Screen::Screen(int height, int width)
+Screen::Screen()
 {
     this->height = GetScreenHeight();
     this->width = GetScreenWidth();
@@ -13,7 +13,7 @@ void Screen::LoadScreen(uint64_t screen[32])
     memcpy(this->screen, screen, sizeof(screen)*32);    
 }
 
-uint64_t Screen::GetScreen() { return *this->screen; }
+uint64_t* Screen::GetScreen() { return this->screen; }
 
 void Screen::RenderScreen()
 {

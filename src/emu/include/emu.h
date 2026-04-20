@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <functional>
 #include "memory.h"
+#include "../../include/ui.h"
 using namespace std;
 
 #ifndef EMU_H
@@ -20,6 +21,7 @@ class Chip8
         stack<uint16_t>* ST; // Stack for 16-bit addresses
         Memory* RAM;
         uint16_t bus = 0;
+        Screen* screen;
 
         // General-Purpose Variable Registers
         // uint8_t V0 = 0;
