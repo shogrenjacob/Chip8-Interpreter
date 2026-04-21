@@ -47,13 +47,14 @@ uint16_t Chip8::Fetch()
     this->IncPC();
     this->IncPC();
 
+    cout << "[ ins ]" << ins << endl;
+
     return ins;
 }
 
 void Chip8::Decode()
 {
     uint16_t ins = this->Fetch();
-    cout << "ins: " << hex << ins << endl;
     uint16_t ins_type = ins & 0xF000; // Single out the first nibble to determine instruction's type
 
     switch (ins_type)
@@ -91,6 +92,7 @@ void Chip8::Decode()
             break;
         case 0xD000:
             this->Draw(ins);
+            break;
         case 0xE000:
             break;
         case 0xF000:
@@ -105,15 +107,13 @@ void Chip8::Execute()
 
 void Chip8::ClearScreen(uint16_t ins)
 {
-    cout << "Clear Screen works!: " << ins << endl;
+    cout << "Cleared Screen" << endl;
 }
 
 void Chip8::Jump(uint16_t ins)
 {
-    cout << "PC Before Jump: " << this->PC << endl;
     uint16_t address = ins & 0x0FFF;
     this->PC = address;
-    cout << "PC after Jump: " << this->PC << endl;
 }
 
 void Chip8::SetReg(uint16_t ins)
@@ -136,15 +136,14 @@ void Chip8::SetIR(uint16_t ins)
 {
     uint16_t address = ins & 0x0FFF;
     this->I = address;
-    cout << "I after SetIR: " << this->I << endl;
 }
 
 void Chip8::Draw(uint16_t ins)
 {
-    uint8_t xReg = ins & 0x0F00;
-    uint8_t yReg = ins & 0x00F0;
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
     uint8_t N = ins & 0x000F;
-
+    
     uint8_t X = this->V[xReg] % 64;
     uint8_t Y = this->V[yReg] % 32;
 
