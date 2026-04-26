@@ -86,6 +86,15 @@ void Chip8::Decode()
             this->AddToReg(ins);
             break;
         case 0x8000:
+            if ((ins & 0x000F) == 0) { this->Set(ins); }
+            else if ((ins & 0x000F) == 1) { this->Or(ins); }
+            else if ((ins & 0x000F) == 2) { this->And(ins); }
+            else if ((ins & 0x000F) == 3) { this->Xor(ins); }
+            else if ((ins & 0x000F) == 4) { this->Add(ins); }
+            else if ((ins & 0x000F) == 5) { this->Sub(ins); }
+            else if ((ins & 0x000F) == 7) { this->SubInv(ins); }
+            else if ((ins & 0x000F) == 6) { this->ShiftRight(ins); }
+            else if ((ins & 0x000F) == 0xE) { this->ShiftLeft(ins); }
             break;
         case 0x9000:
             this->SkipIfRegNotEq(ins);
@@ -235,4 +244,103 @@ void Chip8::SkipIfRegNotEq(uint16_t ins)
     {
         this->PC += 2;
     }
+}
+
+void Chip8::Set(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    this->V[xReg] = this->V[yReg];
+}
+
+void Chip8::Or(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    this->V[xReg] = this->V[xReg] | this->V[yReg];
+}
+
+void Chip8::And(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    this->V[xReg] = this->V[xReg] & this->V[yReg];
+}
+
+void Chip8::Xor(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    this->V[xReg] = this->V[xReg] ^ this->V[yReg];
+}
+
+void Chip8::Add(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    uint16_t checkOverflow = this->V[xReg] + this->V[yReg];
+
+    if (checkOverflow > 255) { this->V[0xF] = 1; }
+    else { this->V[0xF] = 0; }
+
+    uint8_t result = this->V[xReg] + this->V[yReg];
+
+    this->V[xReg] = result;
+}
+
+void Chip8::Sub(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    if (V[xReg] >= V[yReg]) { V[0xF] = 1; }
+    else { V[0xF] = 0; }
+
+    this->V[xReg] = this->V[xReg] - this->V[yReg];
+}
+
+void Chip8::SubInv(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    if (V[yReg] >= V[xReg]) { V[0xF] = 1; }
+    else { V[0xF] = 0; }
+
+    this->V[xReg] = this->V[yReg] - this->V[xReg];
+}
+
+void Chip8::ShiftLeft(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    this->V[xReg] = this->V[yReg];
+
+    uint8_t shiftedOut = (this->V[xReg] & 0b10000000) >> 7;
+
+    if (shiftedOut) { this->V[0xf] = 1; }
+    else { this->V[0xf] = 0; }
+
+    this->V[xReg] <<= 1;
+}
+
+void Chip8::ShiftRight(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    this->V[xReg] = this->V[yReg];
+
+    uint8_t shiftedOut = (this->V[xReg] & 0b00000001);
+
+    if (shiftedOut) { this->V[0xf] = 1; }
+    else { this->V[0xf] = 0; }
+
+    this->V[xReg] >>= 1;
 }

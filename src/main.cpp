@@ -81,18 +81,13 @@ int main ()
     cin >> filename;
 
     emu->RAM->LoadProgram(filename);
-	int i = 0;
 	// game loop
 	while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
 		// drawing
 		BeginDrawing();
 
-		if (i < 25 )
-		{
-			emu->Decode();
-			i++;
-		}
+		emu->Decode();
 
 		// Setup the back buffer for drawing (clear color and depth buffers)
 		ClearBackground(BLACK);
@@ -100,10 +95,10 @@ int main ()
 		//emu->screen->LoadScreen(screen1);
 		emu->screen->RenderScreen();
 
-		if (i == 19)
-		{
-			emu->PrintRegs();
-		}
+		// if (i == 19)
+		// {
+		// 	emu->PrintRegs();
+		// }
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();

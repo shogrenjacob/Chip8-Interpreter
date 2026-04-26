@@ -78,6 +78,15 @@ class Chip8
         void SkipIfEq(uint16_t ins);
         void SkipIfRegNotEq(uint16_t ins);
         void SkipIfRegEq(uint16_t ins);
+        void Or(uint16_t ins);
+        void And(uint16_t ins);
+        void Xor(uint16_t ins);
+        void Set(uint16_t ins);
+        void Add(uint16_t ins);
+        void Sub(uint16_t ins);
+        void SubInv(uint16_t ins);
+        void ShiftLeft(uint16_t ins);
+        void ShiftRight(uint16_t ins);
 };
 
 #endif // EMU_H
