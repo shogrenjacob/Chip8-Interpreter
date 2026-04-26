@@ -61,6 +61,9 @@ class Chip8
         void Decode();
         void Execute();
         // TODO: Keypad
+
+        // Debug
+        void PrintRegs();
         
         // Instructions
         void ClearScreen(uint16_t ins);

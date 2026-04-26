@@ -47,7 +47,7 @@ uint16_t Chip8::Fetch()
     this->IncPC();
     this->IncPC();
 
-    cout << "[ ins ]" << ins << endl;
+    //cout << "[ins] - " << hex << ins << endl;
 
     return ins;
 }
@@ -56,6 +56,8 @@ void Chip8::Decode()
 {
     uint16_t ins = this->Fetch();
     uint16_t ins_type = ins & 0xF000; // Single out the first nibble to determine instruction's type
+
+    cout << "[ins] " << dec << this->PC - 0x200 << "  " << hex << ins << endl;
 
     switch (ins_type)
     {
@@ -97,6 +99,8 @@ void Chip8::Decode()
             break;
         case 0xF000:
             break;
+        default:
+            break;
     }
 }
 
@@ -118,7 +122,7 @@ void Chip8::Jump(uint16_t ins)
 
 void Chip8::SetReg(uint16_t ins)
 {
-    uint16_t WhichReg = ins & 0x0F00 >> 8;
+    uint16_t WhichReg = (ins & 0x0F00) >> 8;
     uint8_t data = ins & 0x00FF;
 
     this->V[WhichReg] = data;
@@ -126,7 +130,7 @@ void Chip8::SetReg(uint16_t ins)
 
 void Chip8::AddToReg(uint16_t ins)
 {
-    uint16_t WhichReg = ins & 0x0F00 >> 8;
+    uint16_t WhichReg = (ins & 0x0F00) >> 8;
     uint8_t data = ins & 0x00FF;
 
     this->V[WhichReg] += data;
@@ -144,10 +148,10 @@ void Chip8::Draw(uint16_t ins)
     uint8_t yReg = (ins & 0x00F0) >> 4;
     uint8_t N = ins & 0x000F;
     
-    uint8_t X = this->V[xReg] % 64;
-    uint8_t Y = this->V[yReg] % 32;
+    uint8_t X = this->V[xReg]; //% 64;
+    uint8_t Y = this->V[yReg]; //% 32;
 
-    Sprite* ns = new Sprite();
+    Sprite* ns = new Sprite(); 
     
     ns->height = N;
 
@@ -157,4 +161,13 @@ void Chip8::Draw(uint16_t ins)
     }
 
     this->screen->DrawSprite(*ns, this->screen->GetScreen(), X, Y);
+}
+
+void Chip8::PrintRegs()
+{
+    for (int i = 0; i < 16; i++)
+    {
+        cout << "V" << i << ": " << (int)this->V[i] << endl;
+    }
+
 }

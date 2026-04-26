@@ -23,7 +23,7 @@ int Memory::LoadProgram(string& f)
     int iter = 0x200;
     while (file.get(byte))
     {
-        this->Ram[iter] = byte;
+        this->SetByte(iter, byte);
         iter++;
     }
 }

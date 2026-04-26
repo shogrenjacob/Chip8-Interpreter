@@ -5,7 +5,7 @@ Screen::Screen()
     this->height = GetScreenHeight();
     this->width = GetScreenWidth();
     this->pixel_height = GetScreenHeight() / 32;
-    this->pixel_width = GetScreenWidth() / 32;
+    this->pixel_width = GetScreenWidth() / 64;
 }
 
 void Screen::LoadScreen(uint64_t screen[32])
@@ -36,10 +36,29 @@ void Screen::RenderScreen()
 
 void Screen::DrawSprite(Sprite sprite, uint64_t s[32], uint ew_offset, uint ns_offset)
 {
+    // for (int i = 0; i < sprite.height; i++)
+	// {
+	// 	s[i + ns_offset] ^= (sprite.lines[i] >> 7) << ew_offset;
+	// }
+    // cout << "sprite.lines[0]: " << hex << (int)sprite.lines[0] << endl;
+
     for (int i = 0; i < sprite.height; i++)
-	{
-		s[i + ns_offset] |= sprite.lines[i] << ew_offset;
-	}
+    {
+        uint8_t spriteByte = sprite.lines[i];  // Get the 8-bit sprite row
+        uint64_t shifted = 0;
+        
+        // Convert from sprite format (bit 7 = leftmost) to screen format (bit 0 = leftmost)
+        for (int bit = 0; bit < 8; bit++)
+        {
+            if (spriteByte & (1 << (7 - bit)))
+            {
+                shifted |= (1ULL << bit);
+            }
+        }
+        
+        // Now shift to the correct horizontal position
+        s[i + ns_offset] ^= shifted << ew_offset;
+    }
 }
 
 void Screen::DrawScreen(Sprite s[64], uint64_t screen[32])
@@ -49,7 +68,7 @@ void Screen::DrawScreen(Sprite s[64], uint64_t screen[32])
 
     for (int i = 0; i < 64; i++)
     {
-        if (this->cursor >= 30) // 56
+        if (this->cursor >= 0x38) // 56
         {
             this->cursor = 0;
             line += s[i].height + 1;

@@ -9,7 +9,7 @@ int main ()
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
 	// Create the window and OpenGL context
-	InitWindow(1280, 800, "Chip-8");
+	InitWindow(1600, 800, "Chip-8");
 	Chip8* emu = new Chip8();
 	Charset* cs = new Charset();
 	Charset Charset = *cs;
@@ -72,7 +72,7 @@ int main ()
 	// screen->DrawSprite(Charset.E, screen2, 20, 20);
 
 	//emu->screen->DrawScreen(sprites, screen1);
-	emu->screen->DebugScreen(screen1);
+	//emu->screen->DebugScreen(screen1);
 
 //	screen1[0] = 12297829382473034410;
 
@@ -81,16 +81,18 @@ int main ()
     cin >> filename;
 
     emu->RAM->LoadProgram(filename);
-
+	int i = 0;
 	// game loop
 	while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
-		if (emu->PC < 4096 )
-		{
-			emu->Decode();
-		}
 		// drawing
 		BeginDrawing();
+
+		if (i < 25 )
+		{
+			emu->Decode();
+			i++;
+		}
 
 		// Setup the back buffer for drawing (clear color and depth buffers)
 		ClearBackground(BLACK);
@@ -98,11 +100,17 @@ int main ()
 		//emu->screen->LoadScreen(screen1);
 		emu->screen->RenderScreen();
 
+		if (i == 19)
+		{
+			emu->PrintRegs();
+		}
+
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
 	}
 
 	// cleanup
+	
 
 	// destroy the window and cleanup the OpenGL context
 	CloseWindow();
