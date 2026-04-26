@@ -72,7 +72,12 @@ class Chip8
         void AddToReg(uint16_t ins);
         void SetIR(uint16_t ins);
         void Draw(uint16_t ins);
-
+        void Subroutine(uint16_t ins);
+        void Return(uint16_t ins);
+        void SkipIfNotEq(uint16_t ins);
+        void SkipIfEq(uint16_t ins);
+        void SkipIfRegNotEq(uint16_t ins);
+        void SkipIfRegEq(uint16_t ins);
 };
 
 #endif // EMU_H

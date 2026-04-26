@@ -19,7 +19,6 @@ struct Sprite
 class Screen
 {
     private:
-        uint64_t screen[32];
         int height;
         int width;
         int pixel_width;
@@ -28,6 +27,7 @@ class Screen
         
     public:
         Screen();
+        uint64_t screen[32];
         void LoadScreen(uint64_t s[32]);
         uint64_t* GetScreen();
         void RenderScreen();

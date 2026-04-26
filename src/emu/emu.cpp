@@ -62,7 +62,8 @@ void Chip8::Decode()
     switch (ins_type)
     {
         case 0x0000:
-            this->ClearScreen(ins);
+            if (ins == 0x00E0) { this->ClearScreen(ins); }
+            else if (ins == 0x00EE) { this->Return(ins); }
             break;
         case 0x1000:
             this->Jump(ins);
@@ -70,10 +71,13 @@ void Chip8::Decode()
         case 0x2000:
             break;
         case 0x3000:
+            this->SkipIfEq(ins);
             break;
         case 0x4000:
+            this->SkipIfNotEq(ins);
             break;
         case 0x5000:
+            this->SkipIfRegEq(ins);
             break;
         case 0x6000:
             this->SetReg(ins);
@@ -84,6 +88,7 @@ void Chip8::Decode()
         case 0x8000:
             break;
         case 0x9000:
+            this->SkipIfRegNotEq(ins);
             break;
         case 0xA000:
             this->SetIR(ins);
@@ -111,7 +116,10 @@ void Chip8::Execute()
 
 void Chip8::ClearScreen(uint16_t ins)
 {
-    cout << "Cleared Screen" << endl;
+    for (int i = 0; i < 32; i++)
+    {
+        this->screen->screen[i] = 0;
+    }
 }
 
 void Chip8::Jump(uint16_t ins)
@@ -169,5 +177,62 @@ void Chip8::PrintRegs()
     {
         cout << "V" << i << ": " << (int)this->V[i] << endl;
     }
+}
 
+void Chip8::Subroutine(uint16_t ins)
+{
+    uint16_t address = ins & 0x0FFF;
+    this->ST->push(address);
+    this->PC = address;
+}
+
+void Chip8::Return(uint16_t ins)
+{
+    uint16_t address = this->ST->top();
+    this->ST->pop();
+    this->PC = address;
+}
+
+void Chip8::SkipIfEq(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    uint16_t val = ins & 0x00FF;
+
+    if (this->V[reg] == val)
+    {
+        this->PC += 2;
+    }
+}
+
+void Chip8::SkipIfNotEq(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    uint16_t val = ins & 0x00FF;
+
+    if (this->V[reg] != val)
+    {
+        this->PC += 2;
+    }
+}
+
+void Chip8::SkipIfRegEq(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    if (this->V[xReg] == this->V[yReg])
+    {
+        this->PC += 2;
+    }
+}
+
+void Chip8::SkipIfRegNotEq(uint16_t ins)
+{
+    uint8_t xReg = (ins & 0x0F00) >> 8;
+    uint8_t yReg = (ins & 0x00F0) >> 4;
+
+    if (this->V[xReg] != this->V[yReg])
+    {
+        this->PC += 2;
+    }
 }
