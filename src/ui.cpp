@@ -15,7 +15,7 @@ void Screen::LoadScreen(uint64_t screen[32])
 
 uint64_t* Screen::GetScreen() { return this->screen; }
 
-void Screen::RenderScreen()
+void Screen::RenderScreen(Color p_color)
 {
     int64_t mask = 1;
 
@@ -26,7 +26,7 @@ void Screen::RenderScreen()
         {
             if (row & mask)
             {
-                DrawRectangle(j*pixel_width, i*pixel_height, pixel_width, pixel_height, WHITE);
+                DrawRectangle(j*pixel_width, i*pixel_height, pixel_width, pixel_height, p_color);
             }
 
             row >>= 1;

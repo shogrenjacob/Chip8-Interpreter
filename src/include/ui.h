@@ -30,7 +30,7 @@ class Screen
         uint64_t screen[32];
         void LoadScreen(uint64_t s[32]);
         uint64_t* GetScreen();
-        void RenderScreen();
+        void RenderScreen(Color p_color);
         void DrawSprite(Sprite sprite, uint64_t s[32], uint ew_offset, uint ns_offset); //TODO: Might need to use a pointer to s
         int GetHeight();
         int GetWidth();

@@ -7,6 +7,10 @@ int main ()
 {
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+	Color GREENYELLOW = {157, 255, 112, 255};
+	Color VGRAPE = {68, 30, 79, 255};
+	Color bg = VGRAPE;
+	Color pix = GREENYELLOW;
 
 	// Create the window and OpenGL context
 	InitWindow(1600, 800, "Chip-8");
@@ -90,10 +94,10 @@ int main ()
 		emu->Decode();
 
 		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(BLACK);
+		ClearBackground(bg);
 
 		//emu->screen->LoadScreen(screen1);
-		emu->screen->RenderScreen();
+		emu->screen->RenderScreen(pix);
 
 		// if (i == 19)
 		// {
