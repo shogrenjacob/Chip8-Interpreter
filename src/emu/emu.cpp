@@ -69,6 +69,7 @@ void Chip8::Decode()
             this->Jump(ins);
             break;
         case 0x2000:
+            this->Subroutine(ins);
             break;
         case 0x3000:
             this->SkipIfEq(ins);
@@ -191,7 +192,7 @@ void Chip8::PrintRegs()
 void Chip8::Subroutine(uint16_t ins)
 {
     uint16_t address = ins & 0x0FFF;
-    this->ST->push(address);
+    this->ST->push(this->PC);
     this->PC = address;
 }
 

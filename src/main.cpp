@@ -13,7 +13,7 @@ int main ()
 	Color pix = GREENYELLOW;
 
 	// Create the window and OpenGL context
-	InitWindow(1600, 800, "Chip-8");
+	InitWindow(1500, 700, "Chip-8");
 	Chip8* emu = new Chip8();
 	Charset* cs = new Charset();
 	Charset Charset = *cs;
