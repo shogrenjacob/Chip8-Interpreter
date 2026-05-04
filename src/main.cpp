@@ -14,77 +14,40 @@ int main ()
 
 	// Create the window and OpenGL context
 	InitWindow(1500, 700, "Chip-8");
+	SetTargetFPS(60);
 	Chip8* emu = new Chip8();
-	Charset* cs = new Charset();
-	Charset Charset = *cs;
+
+	uint8_t chars[] = {
+		0xf0, 0x90, 0x90, 0x90, 0xf0,
+		0x20, 0x30, 0x20, 0x20, 0x70,
+		0xf0, 0x80, 0xf0, 0x10, 0xf0,
+		0xf0, 0x80, 0xf0, 0x80, 0xf0,
+		0x90, 0x90, 0xf0, 0x80, 0x80,
+		0xf0, 0x10, 0xf0, 0x80, 0xf0,
+		0xf0, 0x10, 0xf0, 0x90, 0xf0,
+		0xf0, 0x80, 0x40, 0x20, 0x20,
+		0xf0, 0x90, 0xf0, 0x90, 0xf0,
+		0xf0, 0x90, 0xf0, 0x80, 0xf0,
+		0xf0, 0x90, 0xf0, 0x90, 0x90,
+		0x70, 0x90, 0x70, 0x90, 0x70,
+		0xf0, 0x10, 0x10, 0x10, 0xf0,
+		0x70, 0x90, 0x90, 0x90, 0x70,
+		0xf0, 0x10, 0xf0, 0x10, 0xf0,
+		0xf0, 0x10, 0xf0, 0x10, 0x10,
+	};
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
 
 	uint64_t screen1[32] = {};
 	uint64_t screen2[32] = {};
-	Sprite sprites[64] = {
-		Charset.One,
-		Charset.Two,
-		Charset.Three,
-		Charset.Four,
-		Charset.Five,
-		Charset.Six,
-		Charset.Seven,
-		Charset.Eight,
-		Charset.Nine,
-		Charset.A,
-		Charset.B,
-		Charset.C,
-		Charset.D,
-		Charset.E,
-		Charset.F,
-		Charset.Seven,
-		Charset.Eight,
-		Charset.Nine,
-		Charset.A,
-		Charset.B,
-		Charset.C,
-		Charset.D,
-		Charset.E,
-		Charset.F,
-		Charset.One,
-		Charset.Two,
-		Charset.Three,
-		Charset.Four,
-		Charset.Five,
-		Charset.Six
-	};
-
-	Sprite testSprites[64]
-	{
-		Charset.One,
-		Charset.Two,
-		Charset.Three
-	};
-
-	// screen->DrawSprite(Charset.One, screen1, 0, 0);
-	// screen->DrawSprite(Charset.Two, screen1, 5, 5);
-	// screen->DrawSprite(Charset.Three, screen1, 10, 10);
-	// screen->DrawSprite(Charset.Four, screen1, 15, 15);
-	// screen->DrawSprite(Charset.Five, screen1, 20, 20);
-
-	// screen->DrawSprite(Charset.A, screen2, 0, 0);
-	// screen->DrawSprite(Charset.B, screen2, 5, 5);
-	// screen->DrawSprite(Charset.C, screen2, 10, 10);
-	// screen->DrawSprite(Charset.D, screen2, 15, 15);
-	// screen->DrawSprite(Charset.E, screen2, 20, 20);
-
-	//emu->screen->DrawScreen(sprites, screen1);
-	//emu->screen->DebugScreen(screen1);
-
-//	screen1[0] = 12297829382473034410;
-
+	
 	string filename;
     cout << "Enter path to ROM: " << endl;
     cin >> filename;
 
     emu->RAM->LoadProgram(filename);
+	emu->RAM->LoadCharset(chars);
 	// game loop
 	while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
 	{

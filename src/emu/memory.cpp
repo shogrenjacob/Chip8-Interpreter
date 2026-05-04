@@ -15,7 +15,7 @@ void Memory::SetByte(uint address, uint8_t val)
     this->Ram[address] = val;
 }
 
-int Memory::LoadProgram(string& f)
+void Memory::LoadProgram(string& f)
 {
     ifstream file(f, ios::binary);
 
@@ -25,5 +25,14 @@ int Memory::LoadProgram(string& f)
     {
         this->SetByte(iter, byte);
         iter++;
+    }
+}
+
+void Memory::LoadCharset(uint8_t charset[])
+{
+    uint16_t start = 0x0050;
+    for (int i = 0; i < 80; i++)
+    {
+        this->SetByte(start + i, charset[i]);
     }
 }

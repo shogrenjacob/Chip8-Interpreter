@@ -2,6 +2,7 @@
 #include <stack>
 #include <unordered_map>
 #include <functional>
+#include <random>
 #include "memory.h"
 #include "../../include/ui.h"
 using namespace std;
@@ -21,25 +22,8 @@ class Chip8
         Memory* RAM;
         uint16_t bus = 0;
         Screen* screen;
+        int keys[16] = { KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_A, KEY_S, KEY_D, KEY_F, KEY_Z, KEY_X, KEY_C, KEY_V };
         int PC; // Program counter
-
-        // General-Purpose Variable Registers
-        // uint8_t V0 = 0;
-        // uint8_t V1 = 0;
-        // uint8_t V2 = 0;
-        // uint8_t V3 = 0;
-        // uint8_t V4 = 0;
-        // uint8_t V5 = 0;
-        // uint8_t V6 = 0;
-        // uint8_t V7 = 0;
-        // uint8_t V8 = 0;
-        // uint8_t V9 = 0;
-        // uint8_t VA = 0;
-        // uint8_t VB = 0;
-        // uint8_t VC = 0;
-        // uint8_t VD = 0;
-        // uint8_t VE = 0;
-        // uint8_t VF = 0; // Also used as a flag register
 
         uint8_t V[0xF];
 
@@ -48,8 +32,8 @@ class Chip8
         void IncPC();
         void DecPC();
 
-        void SetDelay(uint time);
-        void SetSound(uint time);
+        void SetDelay(uint8_t time);
+        void SetSound(uint8_t time);
 
         void RunDelay();
         void RunSound();
@@ -60,7 +44,7 @@ class Chip8
         uint16_t Fetch();
         void Decode();
         void Execute();
-        // TODO: Keypad
+        void DecTimer(uint8_t timer);
 
         // Debug
         void PrintRegs();
@@ -87,6 +71,19 @@ class Chip8
         void SubInv(uint16_t ins);
         void ShiftLeft(uint16_t ins);
         void ShiftRight(uint16_t ins);
+        void SkipIfKey(uint16_t ins);
+        void SkipIfNotKey(uint16_t ins);
+        void JumpWithOffset(uint16_t ins);
+        void Rand(uint16_t ins);
+        void SetRegToDelay(uint16_t ins);
+        void SetDelayToReg(uint16_t ins);
+        void SetSoundToReg(uint16_t ins);
+        void AddToIndex(uint16_t ins);
+        void GetKey(uint16_t ins);
+        void FontChar(uint16_t ins);
+        void Bcdc(uint16_t ins);
+        void Store(uint16_t ins);
+        void Load(uint16_t ins);
 };
 
 #endif // EMU_H

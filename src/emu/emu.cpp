@@ -11,19 +11,6 @@ Chip8::Chip8()
 void Chip8::IncPC() { this->PC++; }
 void Chip8::DecPC() { this->PC--; }
 
-void Chip8::SetDelay(uint time) { this->delay += time; }
-void Chip8::SetSound(uint time) { this->sound += time; }
-
-void Chip8::RunDelay()
-{
-    // Todo:
-}
-
-void Chip8::RunSound()
-{
-    // Todo:
-}
-
 uint8_t Chip8::ReadByte()
 {
     Memory mem = *this->RAM;
@@ -104,24 +91,56 @@ void Chip8::Decode()
             this->SetIR(ins);
             break;
         case 0xB000:
+            this->JumpWithOffset(ins);
             break;
         case 0xC000:
+            this->Rand(ins);
             break;
         case 0xD000:
             this->Draw(ins);
             break;
         case 0xE000:
+            if (((ins & 0x00F0) >> 4) == 9) { this->SkipIfKey(ins); }
+            else if (((ins & 0x00F0) >> 4) == 0xA) { this->SkipIfNotKey(ins); }
             break;
         case 0xF000:
+            uint8_t which = ins & 0x00FF;
+            switch(which)
+            {
+                case 0x07:
+                    this->SetRegToDelay(ins);
+                    break;
+                case 0x15:
+                    this->SetDelayToReg(ins);
+                    break;
+                case 0x18:
+                    this->SetSoundToReg(ins);
+                    break;
+                case 0x1E:
+                    this->AddToIndex(ins);
+                    break;
+                case 0x0A:
+                    //this->GetKey(ins);
+                    break;
+                case 0x29:
+                    //this->FontChar(ins);
+                    break;
+                case 0x33:
+                    this->Bcdc(ins);
+                    break;
+                case 0x55:
+                    this->Store(ins);
+                    break;
+                case 0x65:
+                    this->Load(ins);
+                    break;
+                default:
+                    break;
+            }
             break;
-        default:
-            break;
+        // default:
+        //     break;
     }
-}
-
-void Chip8::Execute()
-{
-    // TODO:
 }
 
 void Chip8::ClearScreen(uint16_t ins)
@@ -344,4 +363,99 @@ void Chip8::ShiftRight(uint16_t ins)
     else { this->V[0xf] = 0; }
 
     this->V[xReg] >>= 1;
+}
+
+void Chip8::SkipIfKey(uint16_t ins)
+{
+    uint8_t key = (ins & 0x0F00) >> 8;
+
+    if (IsKeyDown(this->keys[key]))
+    {
+        this->PC += 2;
+    }
+}
+
+void Chip8::SkipIfNotKey(uint16_t ins)
+{
+    uint8_t key = (ins & 0x0F00) >> 8;
+
+    if (!IsKeyDown(this->keys[key]))
+    {
+        this->PC += 2;
+    }
+}
+
+void Chip8::JumpWithOffset(uint16_t ins)
+{
+    uint16_t val = ins & 0x0FFF;
+    uint16_t address = val + this->V[0x0];
+
+    this->PC = address;
+}
+
+void Chip8::Rand(uint16_t ins)
+{
+    uint8_t mask = ins & 0x00FF;
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, 255); // 8 bit max
+
+    uint8_t rand_num = dist(gen);
+    uint8_t result = rand_num & mask;
+    this->V[reg] = result;
+}
+
+void Chip8::SetRegToDelay(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    this->V[reg] = this->delay;
+}
+
+void Chip8::SetDelayToReg(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    this->delay = this->V[reg];
+}
+
+void Chip8::SetSoundToReg(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    this->sound = this->V[reg];
+}
+
+void Chip8::AddToIndex(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    this->I += this->V[reg];
+}
+
+void Chip8::Store(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+
+    for (int i = 0; i <= reg; i++)
+    {
+        this->RAM->SetByte(this->I + i, this->V[i]);
+    }
+}
+
+void Chip8::Load(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+
+    for (int i = 0; i <= reg; i++)
+    {
+        this->V[i] = this->RAM->GetByte(this->I + i);
+    }
+}
+
+void Chip8::Bcdc(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    uint8_t val = V[reg];
+    string str_val = std::to_string(val);
+    this->RAM->SetByte(this->I, str_val[0] - '0'); // - '0' because char num is '0' away from the int version in ascii
+    this->RAM->SetByte(this->I + 1, str_val[1] - '0');
+    this->RAM->SetByte(this->I + 2, str_val[2] - '0');
 }
