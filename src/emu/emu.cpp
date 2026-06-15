@@ -184,6 +184,7 @@ void Chip8::Draw(uint16_t ins)
     uint8_t xReg = (ins & 0x0F00) >> 8;
     uint8_t yReg = (ins & 0x00F0) >> 4;
     uint8_t N = ins & 0x000F;
+    uint64_t* S = this->screen->GetScreen();
     
     uint8_t X = this->V[xReg]; //% 64;
     uint8_t Y = this->V[yReg]; //% 32;
@@ -196,8 +197,9 @@ void Chip8::Draw(uint16_t ins)
     {
         ns->lines.push_back(this->RAM->GetByte(this->I+i));
     }
-
-    this->screen->DrawSprite(*ns, this->screen->GetScreen(), X, Y);
+    
+    this->screen->DrawSprite(*ns, S, X, Y);
+    delete ns;
 }
 
 void Chip8::PrintRegs()
@@ -369,8 +371,9 @@ void Chip8::SkipIfKey(uint16_t ins)
 {
     uint8_t key = (ins & 0x0F00) >> 8;
 
-    if (IsKeyDown(this->keys[key]))
+    if (this->KeyMap[GetKeyPressed()] == key)
     {
+        cout << "key pressed" << endl;
         this->PC += 2;
     }
 }
@@ -379,7 +382,7 @@ void Chip8::SkipIfNotKey(uint16_t ins)
 {
     uint8_t key = (ins & 0x0F00) >> 8;
 
-    if (!IsKeyDown(this->keys[key]))
+    if (!(this->KeyMap[GetKeyPressed()] == key))
     {
         this->PC += 2;
     }
@@ -416,6 +419,22 @@ void Chip8::SetDelayToReg(uint16_t ins)
 {
     uint8_t reg = (ins & 0x0F00) >> 8;
     this->delay = this->V[reg];
+}
+
+void Chip8::RunDelay()
+{
+    if (this->delay != 0)
+    {
+        this->delay--;
+    }
+}
+
+void Chip8::RunSound()
+{
+    if (this->sound != 0)
+    {
+        this->sound--;
+    }
 }
 
 void Chip8::SetSoundToReg(uint16_t ins)
@@ -458,4 +477,20 @@ void Chip8::Bcdc(uint16_t ins)
     this->RAM->SetByte(this->I, str_val[0] - '0'); // - '0' because char num is '0' away from the int version in ascii
     this->RAM->SetByte(this->I + 1, str_val[1] - '0');
     this->RAM->SetByte(this->I + 2, str_val[2] - '0');
+}
+
+void Chip8::GetKey(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+
+    if (GetKeyPressed() == 0)
+    {
+        this->DecPC();
+        this->DecPC();
+    }
+    else
+    {
+        cout << "key pressed" << endl;
+        this->V[reg] = this->KeyMap[GetKeyPressed()];
+    }
 }

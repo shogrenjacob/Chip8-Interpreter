@@ -22,10 +22,10 @@ class Chip8
         Memory* RAM;
         uint16_t bus = 0;
         Screen* screen;
-        int keys[16] = { KEY_ONE, KEY_TWO, KEY_THREE, KEY_FOUR, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_A, KEY_S, KEY_D, KEY_F, KEY_Z, KEY_X, KEY_C, KEY_V };
+        unordered_map<int, int> KeyMap;
         int PC; // Program counter
 
-        uint8_t V[0xF];
+        uint8_t V[16];
 
         Chip8();
 
@@ -44,7 +44,6 @@ class Chip8
         uint16_t Fetch();
         void Decode();
         void Execute();
-        void DecTimer(uint8_t timer);
 
         // Debug
         void PrintRegs();

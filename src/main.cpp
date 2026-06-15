@@ -16,6 +16,22 @@ int main ()
 	InitWindow(1500, 700, "Chip-8");
 	SetTargetFPS(60);
 	Chip8* emu = new Chip8();
+	emu->KeyMap[KEY_ONE] = 0x0;
+	emu->KeyMap[KEY_TWO] = 0x1;
+	emu->KeyMap[KEY_THREE] = 0x2;
+	emu->KeyMap[KEY_FOUR] = 0x3;
+	emu->KeyMap[KEY_Q] = 0x4;
+	emu->KeyMap[KEY_W] = 0x5;
+	emu->KeyMap[KEY_E] = 0x6;
+	emu->KeyMap[KEY_R] = 0x7;
+	emu->KeyMap[KEY_A] = 0x8;
+	emu->KeyMap[KEY_S] = 0x9;
+	emu->KeyMap[KEY_D] = 0xA;
+	emu->KeyMap[KEY_F] = 0xB;
+	emu->KeyMap[KEY_Z] = 0xC;
+	emu->KeyMap[KEY_X] = 0xD;
+	emu->KeyMap[KEY_C] = 0xE;
+	emu->KeyMap[KEY_V] = 0xF;
 
 	uint8_t chars[] = {
 		0xf0, 0x90, 0x90, 0x90, 0xf0,
@@ -54,8 +70,10 @@ int main ()
 		// drawing
 		BeginDrawing();
 
-		emu->Decode();
-
+		for (int i = 0; i < 10; i++)
+		{
+			emu->Decode();
+		}
 		// Setup the back buffer for drawing (clear color and depth buffers)
 		ClearBackground(bg);
 
@@ -69,6 +87,8 @@ int main ()
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
+		emu->RunDelay();
+		emu->RunSound();
 	}
 
 	// cleanup
