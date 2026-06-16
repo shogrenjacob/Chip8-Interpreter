@@ -13,7 +13,7 @@ class Memory
     
     public:
         // Converts Chip-8 program to array of bytes and loads into RAM returns 0 for success and -1 for fail
-        void LoadProgram(string& f);
+        void LoadProgram(uint8_t *data, int dataSize);
 
         // Return byte of data held at given address
         uint8_t GetByte(uint address);
@@ -24,6 +24,8 @@ class Memory
         void LoadRAM(uint8_t ROM[]);
 
         void LoadCharset(uint8_t charset[]);
+
+        void ResetMemory();
 
         // Clears contents of program memory (Charset still remains)
         void Clear();

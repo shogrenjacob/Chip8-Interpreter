@@ -59,31 +59,50 @@ int main ()
 	uint64_t screen2[32] = {};
 	
 	string filename;
-    cout << "Enter path to ROM: " << endl;
-    cin >> filename;
-
-    emu->RAM->LoadProgram(filename);
-	emu->RAM->LoadCharset(chars);
+	bool start = false;
+    // cout << "Enter path to ROM: " << endl;
+    // cin >> filename;
 	// game loop
 	while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
 	{
+		if (IsFileDropped())
+		{
+			FilePathList files = LoadDroppedFiles();
+
+			if (files.count > 0)
+			{
+				int dataSize = 0;
+				uint8_t *fileData = LoadFileData(files.paths[0], &dataSize);
+
+				if (fileData != NULL)
+				{
+					emu->RAM->LoadProgram(fileData, dataSize);
+					emu->RAM->LoadCharset(chars);
+
+					UnloadFileData(fileData);
+				}
+			}
+
+			UnloadDroppedFiles(files);
+			start = true;
+		}
+
 		// drawing
 		BeginDrawing();
 
-		for (int i = 0; i < 10; i++)
+		if (start)
 		{
-			emu->Decode();
+
+			for (int i = 0; i < 10; i++)
+			{
+				emu->Decode();
+			}
+			// Setup the back buffer for drawing (clear color and depth buffers)
+			ClearBackground(bg);
+
+			//emu->screen->LoadScreen(screen1);
+			emu->screen->RenderScreen(pix);
 		}
-		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(bg);
-
-		//emu->screen->LoadScreen(screen1);
-		emu->screen->RenderScreen(pix);
-
-		// if (i == 19)
-		// {
-		// 	emu->PrintRegs();
-		// }
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();

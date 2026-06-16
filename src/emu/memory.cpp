@@ -15,16 +15,21 @@ void Memory::SetByte(uint address, uint8_t val)
     this->Ram[address] = val;
 }
 
-void Memory::LoadProgram(string& f)
+void Memory::LoadProgram(uint8_t *data, int dataSize)
 {
-    ifstream file(f, ios::binary);
-
-    char byte;
     int iter = 0x200;
-    while (file.get(byte))
+    while (iter != 0x200 + dataSize)
     {
-        this->SetByte(iter, byte);
+        this->SetByte(iter, data[iter-0x200]);
         iter++;
+    }
+}
+
+void Memory::ResetMemory()
+{
+    for (int i = 0; i < 4096; i++)
+    {
+        this->Ram[i] = 0;
     }
 }
 
