@@ -44,7 +44,7 @@ void Chip8::Decode()
     uint16_t ins = this->Fetch();
     uint16_t ins_type = ins & 0xF000; // Single out the first nibble to determine instruction's type
 
-    cout << "[ins] " << dec << this->PC - 0x200 << "  " << hex << ins << endl;
+    //cout << "[ins] " << dec << this->PC - 0x200 << "  " << hex << ins << endl;
 
     switch (ins_type)
     {
@@ -120,10 +120,10 @@ void Chip8::Decode()
                     this->AddToIndex(ins);
                     break;
                 case 0x0A:
-                    //this->GetKey(ins);
+                    this->GetKey(ins);
                     break;
                 case 0x29:
-                    //this->FontChar(ins);
+                    this->FontChar(ins);
                     break;
                 case 0x33:
                     this->Bcdc(ins);
@@ -369,9 +369,10 @@ void Chip8::ShiftRight(uint16_t ins)
 
 void Chip8::SkipIfKey(uint16_t ins)
 {
-    uint8_t key = (ins & 0x0F00) >> 8;
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    uint8_t key = V[reg];
 
-    if (this->KeyMap[GetKeyPressed()] == key)
+    if (IsKeyDown(this->KeyMap[key]))
     {
         cout << "key pressed" << endl;
         this->PC += 2;
@@ -380,9 +381,10 @@ void Chip8::SkipIfKey(uint16_t ins)
 
 void Chip8::SkipIfNotKey(uint16_t ins)
 {
-    uint8_t key = (ins & 0x0F00) >> 8;
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    uint8_t key = V[reg];
 
-    if (!(this->KeyMap[GetKeyPressed()] == key))
+    if (!IsKeyDown(this->KeyMap[key]))
     {
         this->PC += 2;
     }
@@ -482,15 +484,26 @@ void Chip8::Bcdc(uint16_t ins)
 void Chip8::GetKey(uint16_t ins)
 {
     uint8_t reg = (ins & 0x0F00) >> 8;
+    int start = GetKeyPressed();
 
-    if (GetKeyPressed() == 0)
+    if (start == 0)
     {
         this->DecPC();
         this->DecPC();
+        this->RunDelay();
+        this->RunSound();
     }
-    else
+    else 
     {
         cout << "key pressed" << endl;
-        this->V[reg] = this->KeyMap[GetKeyPressed()];
+        this->V[reg] = this->KeyMap[start];
     }
+}
+
+void Chip8::FontChar(uint16_t ins)
+{
+    uint8_t reg = (ins & 0x0F00) >> 8;
+    uint8_t font = V[reg];
+
+    this->I = 0x50 + (reg * 5);
 }
